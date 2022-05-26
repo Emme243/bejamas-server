@@ -1,15 +1,25 @@
 const Artwork = require("./models/Artwork");
 
+async function getAllArtworks() {
+  return await Artwork.find();
+}
+
 const resolvers = {
   Query: {
-    hello: () => "Hello world",
     getAllArtworks: async () => {
-      const artworks = await Artwork.find();
+      const artworks = await getAllArtworks();
       return artworks;
     },
     countAllArtowrks: async () => {
-      const artworks = await Artwork.find();
+      const artworks = await getAllArtworks();
       return artworks.length;
+    },
+    getAllCategories: async () => {
+      const artworks = await getAllArtworks();
+      const categories = [
+        ...new Set(artworks.map(artwork => artwork.category)),
+      ];
+      return categories;
     },
   },
   Mutation: {

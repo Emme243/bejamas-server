@@ -1,17 +1,9 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  enum Category {
-    people
-    pets
-    computer
-    nature
-    city
-  }
-
   type Artwork {
     id: ID
-    category: Category
+    category: String
     description: String
     imageUrl: String
     isBestseller: Boolean
@@ -21,14 +13,14 @@ const typeDefs = gql`
   }
 
   type Query {
-    hello: String
     getAllArtworks: [Artwork]
     countAllArtowrks: Int
+    getAllCategories: [String]
   }
 
   type Mutation {
     createArtwork(
-      category: Category
+      category: String
       description: String
       imageUrl: String
       isBestseller: Boolean
