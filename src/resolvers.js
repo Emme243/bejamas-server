@@ -7,21 +7,21 @@ async function getAllArtworks(args) {
   let filterBy = "";
   let filterValue = "";
   if (filter) {
-    const [key, value] = filter.split(",");
+    const [key, value] = filter.split(":");
     filterBy = key;
-    filterValue = value;
+    filterValue = value.split(",");
   }
 
   // Ordenamiento
   let sorting = null;
   if (sort) {
-    const [key, value] = sort.split(",");
+    const [key, value] = sort.split(":");
     const isAscending = value === "asc" || value === undefined ? 1 : -1;
     sorting = { [key]: isAscending };
   }
 
   const artworkFindPromise = Artwork.find({
-    [filterBy]: { $eq: filterValue },
+    [filterBy]: { $in: filterValue },
   });
 
   return sorting
