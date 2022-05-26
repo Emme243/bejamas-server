@@ -23,6 +23,7 @@ const typeDefs = gql`
   type Query {
     hello: String
     getAllArtworks: [Artwork]
+    countAllArtowrks: Int
   }
 
   type Mutation {

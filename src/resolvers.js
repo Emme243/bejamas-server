@@ -7,6 +7,10 @@ const resolvers = {
       const artworks = await Artwork.find();
       return artworks;
     },
+    countAllArtowrks: async () => {
+      const artworks = await Artwork.find();
+      return artworks.length;
+    },
   },
   Mutation: {
     createArtwork: async (_, args) => {
