@@ -1,17 +1,25 @@
 const Artwork = require("./models/Artwork");
 
-async function getAllArtworks() {
-  return await Artwork.find();
+async function getAllArtworks(args) {
+  let key = "";
+  let value = "";
+  if (args.filter) {
+    const [k, v] = args.filter?.split(",");
+    key = k;
+    value = v;
+  }
+
+  return await Artwork.find({ [key]: { $eq: value } });
 }
 
 const resolvers = {
   Query: {
-    getAllArtworks: async () => {
-      const artworks = await getAllArtworks();
+    getDisplayedArtworks: async (_, args) => {
+      const artworks = await getAllArtworks(args);
       return artworks;
     },
-    countAllArtowrks: async () => {
-      const artworks = await getAllArtworks();
+    countDisplayedArtworks: async (_, args) => {
+      const artworks = await getAllArtworks(args);
       return artworks.length;
     },
     getAllCategories: async () => {
