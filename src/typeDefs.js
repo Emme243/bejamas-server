@@ -13,8 +13,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    getDisplayedArtworks(filter: String): [Artwork]
-    countDisplayedArtworks(filter: String): Int
+    getDisplayedArtworks(filter: String, sort: String): [Artwork]
+    countDisplayedArtworks(filter: String, sort: String): Int
     getAllCategories: [String]
   }
 

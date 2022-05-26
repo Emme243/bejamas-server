@@ -1,15 +1,32 @@
 const Artwork = require("./models/Artwork");
 
 async function getAllArtworks(args) {
-  let key = "";
-  let value = "";
-  if (args.filter) {
-    const [k, v] = args.filter?.split(",");
-    key = k;
-    value = v;
+  const { filter, sort } = args;
+
+  // Filtro por campo
+  let filterBy = "";
+  let filterValue = "";
+  if (filter) {
+    const [key, value] = filter.split(",");
+    filterBy = key;
+    filterValue = value;
   }
 
-  return await Artwork.find({ [key]: { $eq: value } });
+  // Ordenamiento
+  let sorting = null;
+  if (sort) {
+    const [key, value] = sort.split(",");
+    const isAscending = value === "asc" || value === undefined ? 1 : -1;
+    sorting = { [key]: isAscending };
+  }
+
+  const artworkFindPromise = Artwork.find({
+    [filterBy]: { $eq: filterValue },
+  });
+
+  return sorting
+    ? await artworkFindPromise.sort(sorting)
+    : await artworkFindPromise;
 }
 
 const resolvers = {
