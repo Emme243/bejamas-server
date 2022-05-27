@@ -44,7 +44,7 @@ const resolvers = {
       return artworks.length;
     },
     getAllCategories: async () => {
-      const artworks = await getAllArtworks();
+      const artworks = await Artwork.find();
       const categories = [...new Set(artworks.map(artwork => artwork.category))];
       return categories;
     },

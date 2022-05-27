@@ -28,7 +28,11 @@ const generateFakeArtwork = function () {
 const artworks = [];
 for (let i = 0; i < 83; i++) artworks.push(generateFakeArtwork());
 
-mongoose.connect(process.env.MONGODB_URI).then(() => console.log('DB connection successful!'));
+mongoose
+  .connect(
+    'mongodb+srv://Emmanuel:emmanuellopezsilva@cluster0.nhpig.mongodb.net/?retryWrites=true&w=majority'
+  )
+  .then(() => console.log('DB connection successful!'));
 
 async function saveArtworksInDb() {
   try {
