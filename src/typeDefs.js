@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Artwork {
@@ -14,18 +14,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    getDisplayedArtworks(
-      filter: String
-      sort: String
-      limit: Int
-      page: Int
-    ): [Artwork]
-    countDisplayedArtworks(
-      filter: String
-      sort: String
-      limit: Int
-      page: Int
-    ): Int
+    getDisplayedArtworks(filter: String, sort: String, limit: Int, page: Int): [Artwork]
+    countArtworksToBeDisplayed(filter: String): Int
     getAllCategories: [String]
   }
 

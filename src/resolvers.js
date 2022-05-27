@@ -39,7 +39,7 @@ const resolvers = {
       const artworks = await getAllArtworks(args);
       return artworks;
     },
-    countDisplayedArtworks: async (_, args) => {
+    countArtworksToBeDisplayed: async (_, args) => {
       const artworks = await getAllArtworks(args);
       return artworks.length;
     },
