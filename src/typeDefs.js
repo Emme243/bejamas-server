@@ -19,15 +19,10 @@ const typeDefs = gql`
   }
 
   type Query {
-    getDisplayedArtworks(
-      filter: String
-      sort: String
-      limit: Int
-      page: Int
-    ): DisplayedArtworkResponse
-    countArtworksToDisplay(filter: String): Int
-    getFeaturedArtwork: Artwork
-    getAllCategories: [String]
+    displayedArtworks(filter: String, sort: String, limit: Int, page: Int): DisplayedArtworkResponse
+    totalArtworksToDisplay(filter: String): Int
+    featuredArtwork: Artwork
+    categories: [String]
   }
 
   type Mutation {
