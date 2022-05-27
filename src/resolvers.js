@@ -1,46 +1,16 @@
 const Artwork = require('./models/Artwork');
-
-async function getAllArtworks(args) {
-  const { filter, sort, limit, page } = args;
-  let artworkFindPromise = Artwork;
-
-  // Filtro por campo
-  let filterBy = '';
-  let filterValue = '';
-  if (filter) {
-    const [key, value] = filter.split(':');
-    filterBy = key;
-    filterValue = value.split(',');
-    artworkFindPromise = artworkFindPromise.find({
-      [filterBy]: { $in: filterValue },
-    });
-  } else {
-    artworkFindPromise = artworkFindPromise.find();
-  }
-
-  // Ordenamiento
-  if (sort) {
-    const [key, value] = sort.split(':');
-    const isAscending = value === 'asc' || value === undefined ? 1 : -1;
-    artworkFindPromise = artworkFindPromise.sort({ [key]: isAscending });
-  }
-
-  // Paginación
-  if (limit && page) {
-    const skip = (page - 1) * limit;
-    artworkFindPromise = artworkFindPromise.skip(skip).limit(limit);
-  }
-  return artworkFindPromise;
-}
+const { QueryFeatures } = require('./utils/QueryFeatures');
 
 const resolvers = {
   Query: {
     getDisplayedArtworks: async (_, args) => {
-      const artworks = await getAllArtworks(args);
+      const featuredArtwork = new QueryFeatures(Artwork, args).filter().sort().pagination();
+      const artworks = await featuredArtwork.model;
       return artworks;
     },
     countArtworksToBeDisplayed: async (_, args) => {
-      const artworks = await getAllArtworks(args);
+      const featuredArtwork = new QueryFeatures(Artwork, args).filter();
+      const artworks = await featuredArtwork.model;
       return artworks.length;
     },
     getAllCategories: async () => {
