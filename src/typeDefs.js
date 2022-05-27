@@ -4,6 +4,7 @@ const typeDefs = gql`
   type Artwork {
     id: ID
     category: String
+    createdAt: String
     description: String
     imageUrl: String
     isBestseller: Boolean
@@ -13,8 +14,18 @@ const typeDefs = gql`
   }
 
   type Query {
-    getDisplayedArtworks(filter: String, sort: String): [Artwork]
-    countDisplayedArtworks(filter: String, sort: String): Int
+    getDisplayedArtworks(
+      filter: String
+      sort: String
+      limit: Int
+      page: Int
+    ): [Artwork]
+    countDisplayedArtworks(
+      filter: String
+      sort: String
+      limit: Int
+      page: Int
+    ): Int
     getAllCategories: [String]
   }
 

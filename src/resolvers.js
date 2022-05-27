@@ -1,32 +1,36 @@
-const Artwork = require("./models/Artwork");
+const Artwork = require('./models/Artwork');
 
 async function getAllArtworks(args) {
-  const { filter, sort } = args;
+  const { filter, sort, limit, page } = args;
+  let artworkFindPromise = Artwork;
 
   // Filtro por campo
-  let filterBy = "";
-  let filterValue = "";
+  let filterBy = '';
+  let filterValue = '';
   if (filter) {
-    const [key, value] = filter.split(":");
+    const [key, value] = filter.split(':');
     filterBy = key;
-    filterValue = value.split(",");
+    filterValue = value.split(',');
+    artworkFindPromise = artworkFindPromise.find({
+      [filterBy]: { $in: filterValue },
+    });
+  } else {
+    artworkFindPromise = artworkFindPromise.find();
   }
 
   // Ordenamiento
-  let sorting = null;
   if (sort) {
-    const [key, value] = sort.split(":");
-    const isAscending = value === "asc" || value === undefined ? 1 : -1;
-    sorting = { [key]: isAscending };
+    const [key, value] = sort.split(':');
+    const isAscending = value === 'asc' || value === undefined ? 1 : -1;
+    artworkFindPromise = artworkFindPromise.sort({ [key]: isAscending });
   }
 
-  const artworkFindPromise = Artwork.find({
-    [filterBy]: { $in: filterValue },
-  });
-
-  return sorting
-    ? await artworkFindPromise.sort(sorting)
-    : await artworkFindPromise;
+  // Paginación
+  if (limit && page) {
+    const skip = (page - 1) * limit;
+    artworkFindPromise = artworkFindPromise.skip(skip).limit(limit);
+  }
+  return artworkFindPromise;
 }
 
 const resolvers = {
@@ -41,9 +45,7 @@ const resolvers = {
     },
     getAllCategories: async () => {
       const artworks = await getAllArtworks();
-      const categories = [
-        ...new Set(artworks.map(artwork => artwork.category)),
-      ];
+      const categories = [...new Set(artworks.map(artwork => artwork.category))];
       return categories;
     },
   },
