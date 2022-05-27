@@ -13,9 +13,20 @@ const typeDefs = gql`
     price: Float
   }
 
+  type DisplayedArtworkResponse {
+    data: [Artwork]
+    total: Int
+  }
+
   type Query {
-    getDisplayedArtworks(filter: String, sort: String, limit: Int, page: Int): [Artwork]
-    countArtworksToBeDisplayed(filter: String): Int
+    getDisplayedArtworks(
+      filter: String
+      sort: String
+      limit: Int
+      page: Int
+    ): DisplayedArtworkResponse
+    countArtworksToDisplay(filter: String): Int
+    getFeaturedArtwork: Artwork
     getAllCategories: [String]
   }
 

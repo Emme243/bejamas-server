@@ -1,6 +1,6 @@
 class QueryFeatures {
   constructor(model, args) {
-    this.model = model;
+    this.query = model;
     this.args = args;
   }
 
@@ -9,8 +9,8 @@ class QueryFeatures {
     if (filter) {
       const [filterKey, values] = filter.split(':');
       const filterValues = values.split(',');
-      this.model = this.model.find({ [filterKey]: { $in: filterValues } });
-    } else this.model = this.model.find();
+      this.query = this.query.find({ [filterKey]: { $in: filterValues } });
+    } else this.query = this.query.find();
 
     return this;
   }
@@ -20,7 +20,7 @@ class QueryFeatures {
     if (sort) {
       const [sortKey, sortValue] = sort.split(':');
       const isAscending = sortValue === 'asc' || sortValue === undefined ? 1 : -1;
-      this.model = this.model.sort({ [sortKey]: isAscending });
+      this.query = this.query.sort({ [sortKey]: isAscending });
     }
 
     return this;
@@ -30,7 +30,7 @@ class QueryFeatures {
     const { limit, page } = this.args;
     if (limit && page) {
       const valuesToSkip = (page - 1) * limit;
-      this.model = this.model.skip(valuesToSkip).limit(limit);
+      this.query = this.query.skip(valuesToSkip).limit(limit);
     }
 
     return this;

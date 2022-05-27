@@ -4,14 +4,20 @@ const { QueryFeatures } = require('./utils/QueryFeatures');
 const resolvers = {
   Query: {
     getDisplayedArtworks: async (_, args) => {
-      const featuredArtwork = new QueryFeatures(Artwork, args).filter().sort().pagination();
-      const artworks = await featuredArtwork.model;
-      return artworks;
+      const displayedArtworkModel = new QueryFeatures(Artwork, args).filter().sort().pagination();
+      const displayedArtworks = await displayedArtworkModel.query;
+      const totalArtworkToDisplayModel = new QueryFeatures(Artwork, args).filter();
+      const totalArtworkToDisplay = await totalArtworkToDisplayModel.query.count();
+      return { data: displayedArtworks, total: totalArtworkToDisplay };
     },
-    countArtworksToBeDisplayed: async (_, args) => {
-      const featuredArtwork = new QueryFeatures(Artwork, args).filter();
-      const artworks = await featuredArtwork.model;
-      return artworks.length;
+    countArtworksToDisplay: async (_, args) => {
+      const totalArtworkToDisplayModel = new QueryFeatures(Artwork, args).filter();
+      const totalArtworkToDisplay = await totalArtworkToDisplayModel.query.count();
+      return totalArtworkToDisplay;
+    },
+    getFeaturedArtwork: async () => {
+      const featuredArtwork = (await Artwork.find({ isFeatured: { $eq: true } })).pop();
+      return featuredArtwork;
     },
     getAllCategories: async () => {
       const artworks = await Artwork.find();
