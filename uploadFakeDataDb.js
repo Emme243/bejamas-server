@@ -1,22 +1,19 @@
 const { faker } = require('@faker-js/faker');
-const mongoose = require('mongoose');
+const { connectToDb } = require('./src/db');
+require('dotenv').config();
 const Artwork = require('./src/models/Artwork');
 
-function capitalize(word) {
-  const lower = word.toLowerCase();
-  return word.charAt(0).toUpperCase() + lower.slice(1);
-}
-
+const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1);
 const generateFakeArtwork = function () {
   const categories = ['city', 'fashion', 'food', 'nature', 'people', 'transport'];
   const category = faker.helpers.arrayElement(categories);
-  const descriptionParagraphNumber = 2;
+  const numberOfDescriptionParagraphs = 2;
   const imageWidth = 1200;
 
   return {
     category,
-    createdAt: faker.datatype.datetime(),
-    description: faker.lorem.paragraph(descriptionParagraphNumber),
+    createdAt: faker.date.between('2020-01-01', '2020-12-31'),
+    description: faker.lorem.paragraph(numberOfDescriptionParagraphs),
     imageUrl: faker.image[category](imageWidth),
     isBestseller: faker.datatype.boolean(),
     isFeatured: false,
@@ -24,25 +21,20 @@ const generateFakeArtwork = function () {
     price: faker.datatype.number({ min: 20, max: 2000, precision: 0.01 }),
   };
 };
-
 const artworks = [];
 for (let i = 0; i < 83; i++) artworks.push(generateFakeArtwork());
 
-mongoose
-  .connect(
-    'mongodb+srv://Emmanuel:emmanuellopezsilva@cluster0.nhpig.mongodb.net/?retryWrites=true&w=majority'
-  )
-  .then(() => console.log('DB connection successful!'));
+connectToDb();
 
-async function saveArtworksInDb() {
-  try {
-    await Artwork.create(artworks);
-    console.log('Data successfully loaded!');
-  } catch (error) {
-    console.log(error);
-  }
+function saveArtworksInDb() {
+  Artwork.create(artworks)
+    .then(() => {
+      console.log('Artworks created');
+      process.exit();
+    })
+    .catch(err => {
+      console.log(err);
+      process.exit();
+    });
 }
-
 saveArtworksInDb();
-
-module.exports = { saveArtworksInDb };
