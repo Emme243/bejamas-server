@@ -14,7 +14,7 @@ const typeDefs = gql`
   }
 
   type DisplayedArtworkResponse {
-    data: [Artwork]
+    artworks: [Artwork]
     total: Int
   }
 

@@ -8,7 +8,7 @@ const resolvers = {
       const displayedArtworks = await displayedArtworkModel.query;
       const totalArtworkToDisplayModel = new QueryFeatures(Artwork, args).filter();
       const totalArtworkToDisplay = await totalArtworkToDisplayModel.query.count();
-      return { data: displayedArtworks, total: totalArtworkToDisplay };
+      return { artworks: displayedArtworks, total: totalArtworkToDisplay };
     },
     totalArtworksToDisplay: async (_, args) => {
       const totalArtworkToDisplayModel = new QueryFeatures(Artwork, args).filter();
