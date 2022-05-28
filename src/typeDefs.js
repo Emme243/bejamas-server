@@ -23,10 +23,20 @@ const typeDefs = gql`
     values: [String]
   }
 
+  enum OrderBy {
+    ASC
+    DESC
+  }
+
+  input SortInput {
+    key: String
+    orderBy: OrderBy
+  }
+
   type Query {
     displayedArtworks(
       filter: FilterInput
-      sort: String
+      sort: SortInput
       limit: Int
       page: Int
     ): DisplayedArtworkResponse

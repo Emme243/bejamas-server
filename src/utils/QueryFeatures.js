@@ -17,9 +17,8 @@ class QueryFeatures {
   sort() {
     const { sort } = this.args;
     if (sort) {
-      const [sortKey, sortValue] = sort.split(':');
-      const isAscending = sortValue === 'asc' || sortValue === undefined ? 1 : -1;
-      this.query = this.query.sort({ [sortKey]: isAscending });
+      const { key, orderBy } = sort;
+      this.query = this.query.sort({ [key]: orderBy });
     }
 
     return this;
