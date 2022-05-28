@@ -7,9 +7,8 @@ class QueryFeatures {
   filter() {
     const { filter } = this.args;
     if (filter) {
-      const [filterKey, values] = filter.split(':');
-      const filterValues = values.split(',');
-      this.query = this.query.find({ [filterKey]: { $in: filterValues } });
+      const { key, values } = filter;
+      this.query = this.query.find({ [key]: { $in: values } });
     } else this.query = this.query.find();
 
     return this;

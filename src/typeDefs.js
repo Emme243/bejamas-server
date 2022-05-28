@@ -18,9 +18,19 @@ const typeDefs = gql`
     total: Int
   }
 
+  input FilterInput {
+    key: String
+    values: [String]
+  }
+
   type Query {
-    displayedArtworks(filter: String, sort: String, limit: Int, page: Int): DisplayedArtworkResponse
-    totalArtworksToDisplay(filter: String): Int
+    displayedArtworks(
+      filter: FilterInput
+      sort: String
+      limit: Int
+      page: Int
+    ): DisplayedArtworkResponse
+    totalArtworksToDisplay(filter: FilterInput): Int
     featuredArtwork: Artwork
     categories: [String]
   }
