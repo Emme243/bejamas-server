@@ -6,10 +6,8 @@ class QueryFeatures {
 
   filter() {
     const { filter } = this.args;
-    if (filter) {
-      const { key, values } = filter;
-      this.query = this.query.find({ [key]: { $in: values } });
-    } else this.query = this.query.find();
+    let filterConfig = filter ? { [filter.key]: { $in: filter.values } } : {};
+    this.query = this.query.find(filterConfig);
 
     return this;
   }
