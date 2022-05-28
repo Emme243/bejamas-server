@@ -4,20 +4,21 @@ const { sample, remove, sampleSize } = require('lodash');
 require('dotenv').config();
 const Artwork = require('./src/models/Artwork');
 
+const FEATURED_ARTWORK_IDX = 23;
+const NUMBER_OF_DESCRIPTION_PARAGRAPHS = 2;
 const artworkCategories = ['city', 'food', 'nature', 'people', 'music', 'books', 'sports'];
 const imagesByCategory = require('./images.json');
-const createArtwork = function () {
+const createArtwork = function (index) {
   const category = sample(artworkCategories);
   const artworkImage = sample(imagesByCategory[category]);
   remove(imagesByCategory[category], image => image.id === artworkImage.id);
 
-  const numberOfDescriptionParagraphs = 2;
   return {
     category,
     createdAt: faker.date.between('2020-01-01', '2020-12-31'),
-    description: faker.lorem.paragraph(numberOfDescriptionParagraphs),
+    description: faker.lorem.paragraphs(NUMBER_OF_DESCRIPTION_PARAGRAPHS, '\n'),
     isBestseller: faker.datatype.boolean(),
-    isFeatured: false,
+    isFeatured: index === FEATURED_ARTWORK_IDX,
     name: artworkImage.alt,
     price: faker.datatype.number({ min: 20, max: 2000, precision: 0.01 }),
     details: {
@@ -34,7 +35,7 @@ const createArtwork = function () {
 const artworks = [];
 const NUMBER_OF_ARTWORKS = 45;
 const NUMBER_OF_RECOMMENDATIONS_PER_ARTWORK = 3;
-for (let i = 0; i < NUMBER_OF_ARTWORKS; i++) artworks.push(createArtwork());
+for (let i = 0; i < NUMBER_OF_ARTWORKS; i++) artworks.push(createArtwork(i));
 artworks.forEach(artwork => {
   artwork.details.recommendations = sampleSize(
     artworks.filter(otherArtwork => otherArtwork.category === artwork.category),
