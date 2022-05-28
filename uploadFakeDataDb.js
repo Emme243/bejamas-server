@@ -1,31 +1,51 @@
 const { faker } = require('@faker-js/faker');
 const { connectToDb } = require('./src/db');
+const { sample, remove, sampleSize } = require('lodash');
 require('dotenv').config();
 const Artwork = require('./src/models/Artwork');
 
-const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1);
-const generateFakeArtwork = function () {
-  const categories = ['city', 'fashion', 'food', 'nature', 'people', 'transport'];
-  const category = faker.helpers.arrayElement(categories);
-  const numberOfDescriptionParagraphs = 2;
-  const imageWidth = 1200;
+const artworkCategories = ['city', 'food', 'nature', 'people', 'music', 'books', 'sports'];
+const imagesByCategory = require('./images.json');
+const createArtwork = function () {
+  const category = sample(artworkCategories);
+  const artworkImage = sample(imagesByCategory[category]);
+  remove(imagesByCategory[category], image => image.id === artworkImage.id);
 
+  const numberOfDescriptionParagraphs = 2;
   return {
     category,
     createdAt: faker.date.between('2020-01-01', '2020-12-31'),
     description: faker.lorem.paragraph(numberOfDescriptionParagraphs),
-    imageUrl: faker.image[category](imageWidth),
     isBestseller: faker.datatype.boolean(),
     isFeatured: false,
-    name: capitalize(faker.lorem.words(3)),
+    name: artworkImage.alt,
     price: faker.datatype.number({ min: 20, max: 2000, precision: 0.01 }),
+    details: {
+      id: artworkImage.id,
+      width: artworkImage.width,
+      height: artworkImage.height,
+      size: faker.datatype.number({ min: 1000, max: 10000 }), // KB
+      src: artworkImage.src,
+      recommendations: [],
+    },
   };
 };
+
 const artworks = [];
-for (let i = 0; i < 83; i++) artworks.push(generateFakeArtwork());
+const NUMBER_OF_ARTWORKS = 45;
+const NUMBER_OF_RECOMMENDATIONS_PER_ARTWORK = 3;
+for (let i = 0; i < NUMBER_OF_ARTWORKS; i++) artworks.push(createArtwork());
+artworks.forEach(artwork => {
+  artwork.details.recommendations = sampleSize(
+    artworks.filter(otherArtwork => otherArtwork.category === artwork.category),
+    NUMBER_OF_RECOMMENDATIONS_PER_ARTWORK
+  ).map(recommendedArtwork => ({
+    name: recommendedArtwork.name,
+    src: recommendedArtwork.details.src,
+  }));
+});
 
 connectToDb();
-
 function saveArtworksInDb() {
   Artwork.create(artworks)
     .then(() => {

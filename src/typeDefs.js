@@ -6,11 +6,36 @@ const typeDefs = gql`
     category: String
     createdAt: String
     description: String
-    imageUrl: String
     isBestseller: Boolean
     isFeatured: Boolean
     name: String
     price: Float
+    details: ArtworkDetails
+  }
+
+  type ArtworkDetails {
+    height: Int
+    id: Int
+    recommendations: [RecommendedArtwork]
+    size: Int
+    src: ImageSrc
+    width: Int
+  }
+
+  type RecommendedArtwork {
+    name: String
+    src: ImageSrc
+  }
+
+  type ImageSrc {
+    landscape: String
+    large2x: String
+    large: String
+    medium: String
+    original: String
+    portrait: String
+    small: String
+    tiny: String
   }
 
   type DisplayedArtworkResponse {

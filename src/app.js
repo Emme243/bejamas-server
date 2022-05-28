@@ -11,7 +11,11 @@ connectToDb();
 const app = express();
 
 async function start() {
-  const apolloServer = new ApolloServer({ typeDefs, resolvers });
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    introspection: process.env.NODE_ENV !== 'production',
+  });
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
   app.listen(process.env.PORT, () => {
