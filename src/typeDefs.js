@@ -43,11 +43,6 @@ const typeDefs = gql`
     total: Int
   }
 
-  input FilterInput {
-    key: String
-    values: [String]
-  }
-
   enum OrderBy {
     ASC
     DESC
@@ -58,14 +53,25 @@ const typeDefs = gql`
     orderBy: OrderBy
   }
 
+  enum FilterType {
+    RANGE
+    IN
+  }
+
+  input FilterInput {
+    key: String
+    values: [String]
+    type: FilterType
+  }
+
   type Query {
     displayedArtworks(
-      filter: FilterInput
+      filter: [FilterInput]
       sort: SortInput
       limit: Int
       page: Int
     ): DisplayedArtworkResponse
-    totalArtworksToDisplay(filter: FilterInput): Int
+    totalArtworksToDisplay(filter: [FilterInput]): Int
     featuredArtwork: Artwork
     categories: [String]
   }

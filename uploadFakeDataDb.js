@@ -19,7 +19,7 @@ const createArtwork = function (index) {
     description: faker.lorem.paragraphs(NUMBER_OF_DESCRIPTION_PARAGRAPHS, '\n'),
     isBestseller: faker.datatype.boolean(),
     isFeatured: index === FEATURED_ARTWORK_IDX,
-    name: artworkImage.alt,
+    name: artworkImage.alt.trim(),
     price: faker.datatype.number({ min: 20, max: 2000, precision: 0.01 }),
     details: {
       id: artworkImage.id,
