@@ -12,22 +12,20 @@ const resolvers = {
     },
     totalArtworksToDisplay: async (_, args) => {
       const totalArtworkToDisplayModel = new QueryFeatures(Artwork, args).filter();
-      const totalArtworkToDisplay = await totalArtworkToDisplayModel.query.count();
-      return totalArtworkToDisplay;
+      return await totalArtworkToDisplayModel.query.count();
     },
     featuredArtwork: async () => {
-      const featuredArtwork = (await Artwork.find({ isFeatured: { $eq: true } })).pop();
-      return featuredArtwork;
+      return (await Artwork.find({ isFeatured: { $eq: true } })).pop();
     },
     artworkPriceRange: async () => {
-      const minPrice = (await Artwork.find({}).sort({ price: 1 }).limit(1)).pop().price;
-      const maxPrice = (await Artwork.find({}).sort({ price: -1 }).limit(1)).pop().price;
+      const artworks = await Artwork.find().sort({ price: 1 });
+      const minPrice = artworks.shift().price;
+      const maxPrice = artworks.pop().price;
       return { minPrice, maxPrice };
     },
     categories: async () => {
       const artworks = await Artwork.find();
-      const categories = [...new Set(artworks.map(artwork => artwork.category))];
-      return categories;
+      return [...new Set(artworks.map(artwork => artwork.category))];
     },
   },
   Mutation: {
