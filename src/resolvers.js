@@ -19,6 +19,11 @@ const resolvers = {
       const featuredArtwork = (await Artwork.find({ isFeatured: { $eq: true } })).pop();
       return featuredArtwork;
     },
+    artworkPriceRange: async () => {
+      const minPrice = (await Artwork.find({}).sort({ price: 1 }).limit(1)).pop().price;
+      const maxPrice = (await Artwork.find({}).sort({ price: -1 }).limit(1)).pop().price;
+      return { minPrice, maxPrice };
+    },
     categories: async () => {
       const artworks = await Artwork.find();
       const categories = [...new Set(artworks.map(artwork => artwork.category))];

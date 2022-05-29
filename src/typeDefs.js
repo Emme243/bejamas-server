@@ -64,6 +64,11 @@ const typeDefs = gql`
     type: FilterType
   }
 
+  type ArtworkPriceRange {
+    minPrice: Float
+    maxPrice: Float
+  }
+
   type Query {
     displayedArtworks(
       filter: [FilterInput]
@@ -73,6 +78,7 @@ const typeDefs = gql`
     ): DisplayedArtworkResponse
     totalArtworksToDisplay(filter: [FilterInput]): Int
     featuredArtwork: Artwork
+    artworkPriceRange: ArtworkPriceRange
     categories: [String]
   }
 
