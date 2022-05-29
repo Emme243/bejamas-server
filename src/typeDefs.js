@@ -43,14 +43,14 @@ const typeDefs = gql`
     total: Int
   }
 
-  enum OrderBy {
+  enum SortType {
     ASC
     DESC
   }
 
   input SortInput {
-    key: String
-    orderBy: OrderBy
+    by: String
+    type: SortType
   }
 
   enum FilterType {
