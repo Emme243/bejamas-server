@@ -23,8 +23,8 @@ class QueryFeatures {
   sort() {
     const { sort } = this.args;
     if (sort) {
-      const { key, orderBy } = sort;
-      this.query = this.query.sort({ [key]: orderBy });
+      const { by, type } = sort;
+      this.query = this.query.sort({ [by]: type });
     }
 
     return this;
