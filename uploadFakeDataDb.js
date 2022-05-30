@@ -1,6 +1,6 @@
 const { faker } = require('@faker-js/faker');
 const { connectToDb } = require('./src/db');
-const { sample, remove, sampleSize } = require('lodash');
+const { sample, remove, sampleSize, capitalize } = require('lodash');
 require('dotenv').config();
 const Artwork = require('./src/models/Artwork');
 
@@ -19,7 +19,7 @@ const createArtwork = function (index) {
     description: faker.lorem.paragraphs(NUMBER_OF_DESCRIPTION_PARAGRAPHS, '\n'),
     isBestseller: faker.datatype.boolean(),
     isFeatured: index === FEATURED_ARTWORK_IDX,
-    name: artworkImage.alt.trim(),
+    name: capitalize(artworkImage.alt.trim()),
     price: faker.datatype.number({ min: 20, max: 2000, precision: 0.01 }),
     details: {
       id: artworkImage.id,
