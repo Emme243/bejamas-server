@@ -48,7 +48,8 @@ artworks.forEach(artwork => {
 
 connectToDb();
 function saveArtworksInDb() {
-  Artwork.create(artworks)
+  Artwork.deleteMany()
+    .then(() => Artwork.create(artworks))
     .then(() => {
       console.log('Artworks created');
       process.exit();
